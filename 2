@@ -1,0 +1,49 @@
+#include <iostream>
+#include <stdlib.h>
+#include <cmath>
+using namespace std;
+
+/**
+ * @brief Считывает значение с клавиатуры с проверкой ввода.
+ * @return Введенное значение типа double.
+ */
+double getValue();
+
+/**
+ * @brief Вычисляет площадь круга по длине окружности.
+ * @param L Длина окружности.
+ * @return Площадь круга.
+ */
+double calculateArea(const double L);
+
+int main() 
+{
+    cout << "Введите длину окружности: ";
+    double L = getValue();
+
+    if (L <= 0) 
+    {
+        cout << "Длинна должна быть положительной" << endl;
+        abort(); 
+    }
+
+    cout << "Площадь составляет " << calculateArea(L) << endl;
+    return 0;
+}
+
+double getValue()
+{
+    double value;
+    cin >> value;
+    if (cin.fail()) 
+    { 
+        cout << "Неправильное значение" << endl;
+        abort(); 
+    }
+    return value;
+}
+
+double calculateArea(const double L)
+ {
+    return pow(L,2) / (4 * M_PI); 
+}
