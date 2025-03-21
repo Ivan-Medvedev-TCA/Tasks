@@ -21,11 +21,7 @@ int main()
     cout << "Введите длину окружности: ";
     double L = getValue();
 
-    if (L <= 0) 
-    {
-        cout << "Длинна должна быть положительной" << endl;
-        abort(); 
-    }
+  
 
     cout << "Площадь составляет " << calculateArea(L) << endl;
     return 0;
@@ -38,6 +34,12 @@ double getValue()
     if (cin.fail()) 
     { 
         cout << "Неправильное значение" << endl;
+        abort(); 
+       
+    }
+     if (value <= 0) 
+    {
+        cout << "Длинна должна быть положительной" << endl;
         abort(); 
     }
     return value;
