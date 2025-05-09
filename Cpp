@@ -1,0 +1,149 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+/**
+ * @brief Считывает целое число с консоли с проверкой корректности ввода
+ * @return int — считанное целочисленное значение
+ * @throws abort() при некорректном вводе или нечисловых данных
+ */
+int getValue();
+
+/**
+ * @brief Считывает вещественное число с консоли с проверкой корректности ввода
+ * @return double — считанное вещественное значение
+ * @throws abort() при некорректном вводе или нечисловых данных
+ */
+double getDouble();
+
+/**
+ * @brief Проверяет корректность количества членов ряда
+ * @param n — количество членов для суммирования
+ * @throws abort() если n < 1
+ */
+void checkN(const int n);
+
+/**
+ * @brief Вычисляет сумму первых n членов ряда
+ * @param n — количество суммируемых членов
+ * @return double — результат суммирования
+ */
+double sumN(const int n);
+
+/**
+ * @brief Вычисляет следующий член ряда по рекуррентной формуле
+ * @param current — текущее значение члена ряда
+ * @param k — текущий индекс члена (начиная с 1)
+ * @return double — следующее значение члена ряда
+ */
+double getNext(const double current, const int k);
+
+/**
+ * @brief Проверяет корректность точности вычислений
+ * @param e — заданная точность
+ * @throws abort() если e <= 0
+ */
+void checkE(const double e);
+
+/**
+ * @brief Вычисляет сумму членов ряда с заданной точностью
+ * @param e — минимальный допустимый модуль члена ряда
+ * @return double — сумма членов, удовлетворяющих условию |aₖ| >= e
+ */
+double sumE(const double e);
+
+/**
+ * @brief Точка входа в программу
+ * @return int — 0 при успешном выполнении, код ошибки в других случаях
+ */
+int main() 
+{
+    setlocale(LC_ALL, "RUS");
+    
+    cout << "Введите число членов ряда: ";
+    int n = getValue();
+    checkN(n);
+    cout << "Сумма " << n << " членов: " << sumN(n) << endl;
+    cout << "Введите точность e: ";
+    double e = getDouble();
+    checkE(e);
+    cout << "Сумма с точностью e: " << sumE(e) << endl;
+    return 0;
+}
+
+
+int getValue() 
+{
+    int value;
+    cin >> value;
+    if (cin.fail()) 
+    {
+        cerr << "Ошибка: Введены некорректные данные" << endl;
+        abort();
+    }
+    return value;
+}
+
+double getDouble() 
+{
+    double value;
+    cin >> value;
+    if (cin.fail())
+    {
+        cerr << "Ошибка: Введены некорректные данные" << endl;
+        abort();
+    }
+    return value;
+}
+
+void checkN(const int n) 
+{
+    if (n < 1)
+    {
+        cerr << "Ошибка: n должно быть ≥ 1" << endl;
+        abort();
+    }
+}
+
+double sumN(const int n)
+{
+    double current = 1.0; 
+    double sum = current;
+
+    for (int k = 1; k < n; ++k)
+    {
+        current = getNext(current, k);
+        sum += current;
+    }
+    return sum;
+}
+
+double getNext(const double current, const int k)
+{
+    return current * (-(k + 1.0)) / (k * k);
+}
+
+void checkE(const double e) 
+{
+    if (e <= 0)
+    {
+        cerr << "Ошибка: e должно быть > 0" << endl;
+        abort();
+    }
+}
+
+double sumE(const double e)
+{
+    double current = 1.0; 
+    double sum = 0.0;
+    int k = 0; 
+   
+    while (fabs(current) >= e)
+    {
+        sum += current;
+        k++;
+        current = getNext(current, k);
+    }
+    return sum;
+}
