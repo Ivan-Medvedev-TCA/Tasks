@@ -75,7 +75,7 @@ int main()
 
 int getValue() 
 {
-    int value;
+    int value = 0;
     cin >> value;
     if (cin.fail()) 
     {
@@ -87,7 +87,7 @@ int getValue()
 
 double getDouble() 
 {
-    double value;
+    double value = 0;
     cin >> value;
     if (cin.fail())
     {
@@ -142,8 +142,8 @@ double sumE(const double e)
     while (fabs(current) >= e)
     {
         sum += current;
-        k++;
         current = getNext(current, k);
+          k++;
     }
     return sum;
 }
