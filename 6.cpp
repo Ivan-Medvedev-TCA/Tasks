@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <climits>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ void zapmass(int* arr, size_t n);
 * @param arr Указатель на массив
 * @param n Размер массива
 */
-void vivoidmass(int* arr, size_t n);
+void vivoidmass(const int* arr, size_t n);
 
 /**
 * @brief Находит максимальный отрицательный элемент массива
@@ -43,7 +44,7 @@ void vivoidmass(int* arr, size_t n);
 * @param n Размер массива
 * @return Максимальное отрицательное значение или -11 если таких элементов нет
 */
-int maxotrmass(int* arr, size_t n);
+int maxotrmass(const int* arr, const size_t n);
 
 /**
 * @brief Заменяет второй элемент массива на первый отрицательный
@@ -60,7 +61,7 @@ void zammass(int* arr, size_t n);
 * @param A Верхняя граница значений
 * @return Количество элементов удовлетворяющих условию
 */
-int c4etmass(int* arr, size_t n, int A);
+int c4etmass(const int* arr, size_t n, const int A);
 
 /**
 * @brief Ищет первую пару соседних элементов с суммой меньше заданного числа
@@ -69,23 +70,22 @@ int c4etmass(int* arr, size_t n, int A);
 * @param number Целевая сумма для сравнения
 * @return Индекс первого элемента пары или -1 если пара не найдена
 */
-int parmass(int* arr, size_t n, int number);
+int parmass(const int* arr, const size_t n, const int number);
 
 /**
-* @brief Проверяет наличие отрицательных элементов в массиве
-* @param arr Указатель на массив
-* @param n Размер массива
-* @return true, если есть хотя бы один отрицательный элемент, иначе false
-*/
-bool firstNegativ(int* arr, size_t n);
-
-/**
-* @brief Проверяет наличие отрицательных элементов в массиве
+* @brief Находит индекс первого отрицательного элемента в массиве
 * @param arr Указатель на массив для проверки
 * @param n Размер проверяемого массива
-* @return true - если массив содержит хотя бы один отрицательный элемент, false - если отрицательных элементов нет
+* @return Индекс первого отрицательного элемента или -1 если таких элементов нет
 */
+int firstNegativ(const int* arr, size_t n);
+
+/**
+ * @brief Ввод самостоятельнро
+ * @brief Ввод рандомом
+ */
 enum {MANUALY, RANDOM};
+
 /**
  * @brief Точка входа в программу
  * @return 0 при успешном выполнении
@@ -148,10 +148,19 @@ void kormass(const int n)
     }
 }
 
-void zapmass(int* arr, const size_t n)
+void zapmass(int* arr, size_t n)
 {
     cout << "Выбери метод ввода (" << RANDOM << " - Рандом, " << MANUALY << " - Ручной ввод): ";
     int choice = getValue();
+    int min_val, max_val;
+    
+    if (choice == RANDOM || choice == MANUALY) {
+        cout << "Введите минимальное значение: ";
+        min_val = getValue();
+        cout << "Введите максимальное значение: ";
+        max_val = getValue();
+    }
+
     switch (choice) 
     {
         case RANDOM: 
@@ -159,7 +168,7 @@ void zapmass(int* arr, const size_t n)
             srand(time(0));
             for (size_t i = 0; i < n; i++)
             {
-                arr[i] = -10 + rand() % 21;
+                arr[i] = min_val + rand() % (max_val - min_val + 1);
             }
             break;
         }
@@ -167,17 +176,14 @@ void zapmass(int* arr, const size_t n)
         {
             for (size_t i = 0; i < n; i++) 
             {
-                while (true) 
+                cout << "Ввод массива[" << i + 1 << "] (от " << min_val << " до " << max_val << "): ";
+                int value = getValue();
+                if (value < min_val || value > max_val)
                 {
-                    cout << "Ввод массива[" << i + 1 << "] (от -10 до 10): ";
-                    int value = getValue();
-                    if (value >= -10 && value <= 10)
-                    {
-                        arr[i] = value;
-                        break;
-                    }
-                    cout << "Ошибка! Значение не должно превышать от -10 до 10. Выбери другое значение.";
+                    cout << "Ошибка! Значение вне диапазона. Программа остановлена." << endl;
+                    abort();
                 }
+                arr[i] = value;
             }
             break;
         }
@@ -187,7 +193,7 @@ void zapmass(int* arr, const size_t n)
     }
 }
 
-void vivoidmass(int* arr, const size_t n)
+void vivoidmass(const int* arr, size_t n)
 {
     for (size_t i = 0; i < n; i++)
     {
@@ -196,7 +202,7 @@ void vivoidmass(int* arr, const size_t n)
     cout << endl;
 }
 
-int maxotrmass(int* arr, const size_t n)
+int maxotrmass(const int* arr, size_t n)
 {
     int maxNeg = -11;
     for (size_t i = 0; i < n; i++) {
@@ -208,32 +214,25 @@ int maxotrmass(int* arr, const size_t n)
     return maxNeg;
 }
 
-void zammass(int* arr, const size_t n)
+void zammass(int* arr, size_t n)
 {
     if (n < 2)
     {
         cout << "Массив слишком мал для замены второго элемента." << endl;
         return;
     }
-    int firstNeg = -11;
-    for (size_t i = 0; i < n; i++)
-    {
-        if (arr[i] < 0)
-        {
-            firstNeg = arr[i];
-            break;
-        }
-    }
-    if (firstNeg == -11) 
+    int index = firstNegativ(arr, n);
+    if (index == -1) 
     {
         cout << "Нет отрицательных элементов. Второй элемент не заменен." << endl;
-    } else 
+    } 
+    else 
     {
-        arr[1] = firstNeg;
+        arr[1] = arr[index];
     }
 }
 
-int c4etmass(int* arr, size_t n, int A) 
+int c4etmass(const int* arr, size_t n, const int A) 
 {
     int count = 0;
     for (size_t i = 0; i < n; i++)
@@ -246,26 +245,26 @@ int c4etmass(int* arr, size_t n, int A)
     return count;
 }
 
-int parmass(int* arr, size_t n, int number) 
+int parmass(const int* arr, size_t n, const int number) 
 {
     for (size_t i = 0; i < n - 1; i++) 
     {
         if (arr[i] + arr[i + 1] < number)
         {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;
 }
 
-bool firstNegativ(int* arr, size_t n)
+int firstNegativ(const int* arr, size_t n)
 {
     for (size_t i = 0; i < n; ++i)
     {
         if (arr[i] < 0) 
         {
-            return true;
+            return static_cast<int>(i);
         }
     }
-    return false;
+    return -1;
 }
