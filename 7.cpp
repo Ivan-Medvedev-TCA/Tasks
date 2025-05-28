@@ -72,7 +72,7 @@ int** copyArray(int** array, const size_t m, const size_t n);
  * @return Новая независимая копия массива
  */
 
-void zapchutmass(int** array, size_t m, size_t n);
+void zapchutmass(int** array, const size_t m, const size_t n);
 /**
  * @brief Заменяет четные элементы на максимальный по модулю элемент в столбце
  * @param array Целевой массив
@@ -81,7 +81,15 @@ void zapchutmass(int** array, size_t m, size_t n);
  * @note Модифицирует исходный массив
  */
 
-int** ydchet(int** array, size_t m, size_t n, size_t& new_n);
+size_t countColumns(int** array, const size_t n);
+/**
+ * @brief Подсчитывает количество столбцов с нечетным первым элементом
+ * @param array Исходный массив
+ * @param n Количество столбцов
+ * @return Количество подходящих столбцов
+ */
+
+int** ydchet(int** array, const size_t m, const size_t n, size_t& new_n);
 /**
  * @brief Удаляет столбцы с четным первым элементом
  * @param array Исходный массив
@@ -95,7 +103,7 @@ int** ydchet(int** array, size_t m, size_t n, size_t& new_n);
 enum { RANDOM = 1, MANUAL = 0 };
 /**
 * @brief Перечисление для выбора способа заполнения данных
-* @param MANUALY Выбор ручного заполнения массива
+* @param MANUAL Выбор ручного заполнения массива
 * @param RANDOM Выбор автоматического заполнения массива
 */
 int main() 
@@ -127,13 +135,15 @@ int main()
     }
     cout << "Исходный массив:";
     printArray(array, m, n);
+    
     int** task1Array = copyArray(array, m, n);
     zapchutmass(task1Array, m, n);
     cout << "После задачи 1 (замена чётных на максимум в столбце):";
     printArray(task1Array, m, n);
     deleteArray(task1Array, m, n);
     size_t new_n;
-    int** task2Array = ydchet(array, m, n, new_n);
+    int** task2Source = copyArray(array, m, n);
+    int** task2Array = ydchet(task2Source, m, n, new_n);
     cout << "После задачи 2 (удалены столбцы с чётным первым элементом):";
     if (task2Array != nullptr && new_n > 0) 
     {
@@ -142,105 +152,14 @@ int main()
     } 
     else 
     {
-        cout << "Нет оставшихся столбцов.";
+        cout << "Нет оставшихся столбцов." << endl;
     }
+    deleteArray(task2Source, m, n);
 
     deleteArray(array, m, n);
     return 0;
 }
-
-int** getNewArray(const size_t m, const size_t n) 
-{
-    int** array = new int*[m];
-    for (size_t i = 0; i < m; i++) 
-    {
-        array[i] = new int[n];
-    }
-    return array;
-}
-
-void deleteArray(int** array, const size_t m, const size_t n) 
-{
-    for (size_t i = 0; i < m; i++) 
-    {
-        delete[] array[i]; 
-    }
-    delete[] array;
-}
-
-void printArray(int** array, const size_t m, const size_t n) 
-{
-    for (size_t i = 0; i < m; i++) 
-    {
-        for (size_t j = 0; j < n; j++) 
-        {
-            cout << setw(6) << array[i][j];
-        }
-        cout << endl;
-    }
-}
-
-void fillArray(int** array, const size_t m, const size_t n) 
-{
-    for (size_t i = 0; i < m; i++) 
-    {
-        for (size_t j = 0; j < n; j++) 
-        {
-            cout << "Введите array[" << i << "][" << j << "]: ";
-            array[i][j] = getValue();
-        }
-    }
-}
-
-void fillRandom(int** array, const size_t m, const size_t n, const int start, const int end) 
-{
-    srand(time(0));
-    for (size_t i = 0; i < m; i++) 
-    {
-        for (size_t j = 0; j < n; j++) 
-        {
-            array[i][j] = rand() % (end - start + 1) + start;
-        }
-    }
-}
-
-int getValue() 
-{
-    int value = 0;
-    cin >> value;
-    if (cin.fail()) 
-    {
-        cerr << "Ошибка ввода!";
-        abort();
-    }
-    return value;
-}
-
-size_t getSize() 
-{
-    int size = getValue();
-    if (size <= 0) 
-    {
-        cerr << "Размер должен быть положительным!";
-        abort();
-    }
-    return static_cast<size_t>(size);
-}
-
-int** copyArray(int** array, const size_t m, const size_t n) 
-{
-    int** newArray = getNewArray(m, n);
-    for (size_t i = 0; i < m; i++) 
-    {
-        for (size_t j = 0; j < n; j++) 
-        {
-            newArray[i][j] = array[i][j];
-        }
-    }
-    return newArray;
-}
-
-void zapchutmass(int** array, size_t m, size_t n) 
+void zapchutmass(int** array, const size_t m, const size_t n) 
 {
     for (size_t j = 0; j < n; j++) 
     {
@@ -264,7 +183,7 @@ void zapchutmass(int** array, size_t m, size_t n)
     }
 }
 
-int** ydchet(int** array, size_t m, size_t n, size_t& new_n) 
+size_t countColumns(int** array, const size_t n) 
 {
     size_t count = 0;
     for (size_t j = 0; j < n; j++) 
@@ -274,9 +193,13 @@ int** ydchet(int** array, size_t m, size_t n, size_t& new_n)
             count++;
         }
     }
-    new_n = count;
+    return count;
+}
 
-    if (count == 0) 
+int** ydchet(int** array, const size_t m, const size_t n, size_t& new_n) 
+{
+    new_n = countColumns(array, n);
+    if (new_n == 0) 
     {
         return nullptr;
     }
