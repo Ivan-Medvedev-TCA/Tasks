@@ -250,3 +250,4 @@ int findFirstPairWithDifferentSigns(int* arr, size_t n)
     return -1;
 }
 
+
