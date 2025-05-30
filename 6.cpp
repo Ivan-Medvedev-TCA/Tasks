@@ -1,90 +1,82 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <climits>
-
 using namespace std;
 
 /**
-* @brief Считывает целое значение с клавиатуры с проверкой ввода
-* @return Введенное значение
-*/
+ * @brief Считывает целое значение с клавиатуры с проверкой ввода
+ * @return Введенное значение
+ */
 int getValue();
 
 /**
-* @brief Получает и проверяет размер массива
-* @return Размер массива
-*/
-size_t razmmass();
-
-/**
-* @brief Проверяет корректность размера массива
-* @param n Проверяемое значение размера
-* @return Завершает программу при n <= 0
-*/
-void kormass(const int n);
-
-/**
-* @brief Заполняет массив значениями
-* @param arr Указатель на массив
-* @param n Размер массива
-*/
-void zapmass(int* arr, size_t n);
-
-/**
-* @brief Выводит массив на экран
-* @param arr Указатель на массив
-* @param n Размер массива
-*/
-void vivoidmass(const int* arr, size_t n);
-
-/**
-* @brief Находит максимальный отрицательный элемент массива
-* @param arr Указатель на массив
-* @param n Размер массива
-* @return Максимальное отрицательное значение или -11 если таких элементов нет
-*/
-int maxotrmass(const int* arr, const size_t n);
-
-/**
-* @brief Заменяет второй элемент массива на первый отрицательный
-* @param arr Указатель на массив
-* @param n Размер массива
-* @return Выводит предупреждение если массив слишком мал или нет отрицательных элементов
-*/
-void zammass(int* arr, size_t n);
-
-/**
-* @brief Считает количество положительных элементов, не превышающих A
-* @param arr Указатель на массив
-* @param n Размер массива
-* @param A Верхняя граница значений
-* @return Количество элементов удовлетворяющих условию
-*/
-int c4etmass(const int* arr, size_t n, const int A);
-
-/**
-* @brief Ищет первую пару соседних элементов с суммой меньше заданного числа
-* @param arr Указатель на массив
-* @param n Размер массива
-* @param number Целевая сумма для сравнения
-* @return Индекс первого элемента пары или -1 если пара не найдена
-*/
-int parmass(const int* arr, const size_t n, const int number);
-
-/**
-* @brief Находит индекс первого отрицательного элемента в массиве
-* @param arr Указатель на массив для проверки
-* @param n Размер проверяемого массива
-* @return Индекс первого отрицательного элемента или -1 если таких элементов нет
-*/
-int firstNegativ(const int* arr, size_t n);
-
-/**
- * @brief Ввод самостоятельнро
- * @brief Ввод рандомом
+ * @brief Получает и проверяет размер массива
+ * @return Размер массива
  */
-enum {MANUALY, RANDOM};
+size_t getSize();
+
+/**
+ * @brief Проверяет корректность размера массива
+ * @param n Проверяемое значение размера
+ * @return Завершает программу при n <= 0
+ */
+void checkN(const int n);
+
+/**
+ * @brief Заполняет массив значениями
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ */
+void fillArray(int* arr, const size_t n);
+
+/**
+ * @brief Находит максимальный элемент массива
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @return Максимальное значение
+ */
+void printArray(int* arr, const size_t n);
+
+/**
+ * @brief Заменяет предпоследний элемент массива на максимальный
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @return Выводит изменёный элемент массива
+ */
+int findMaxAbs(int* arr, const size_t n);
+
+/**
+ * @brief Заменяет второй элемент массива на максимальный отрицательный
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @return Выводит предупреждение если массив слишком мал или не найдено допустимых элементов для замены
+ */
+void replacePenultimateWithMaxAbs(int* arr, const size_t n);
+
+/**
+ * @brief Считает количество элементов, которые делятся на значение N без остатка
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @param N число на которое элемент должен делиться без остатка
+ * @return Количество элементов удовлетворяющих условию
+ */
+int countDivisibleByN(int* arr, size_t n, int N);
+
+/**
+ * @brief Ищет номер первой пары соседних элементов с разными знаками
+ * @param arr Указатель на массив
+ * @param n Размер массива
+ * @return Индекс первого элемента пары или -1 если пара не найдена
+ */
+int findFirstPairWithDifferentSigns(int* arr, size_t n);
+
+/**
+* @brief Перечисление для выбора способа заполнения данных
+* @param MANUALY Выбор ручного заполнения массива
+* @param RANDOM Выбор автоматического заполнения массива
+*/
+const int RANDOM = 1;
+const int MANUALY = 2;
 
 /**
  * @brief Точка входа в программу
@@ -92,29 +84,30 @@ enum {MANUALY, RANDOM};
  */
 int main() 
 {
-    size_t n = razmmass();
+    size_t n = getSize();
     int* arr = new int[n];
-    zapmass(arr, n);
-    cout << "Основной массив: ";
-    vivoidmass(arr, n);
-    zammass(arr, n);
-    cout << "Массив после замены: ";
-    vivoidmass(arr, n);
-    cout << "Введите А для задания 2: ";
-    int A = getValue();
-    int count = c4etmass(arr, n, A);
-    cout << "Количество положительных элементов <= A: " << count << endl;
-    cout << "Введите число для задачи 3: ";
-    int num = getValue();
-    int pairIndex = parmass(arr, n, num);
-    if (pairIndex == -1)
+    fillArray(arr, n);
+    cout << "Original array: ";
+    printArray(arr, n);
+
+    replacePenultimateWithMaxAbs(arr, n);
+    cout << "Array after replacing penultimate element with max absolute value: ";
+    printArray(arr, n);
+
+    cout << "Enter N for task 2: ";
+    int N = getValue();
+    int count = countDivisibleByN(arr, n, N);
+    cout << "Number of elements divisible by N: " << count << endl;
+
+    int pairIndex = findFirstPairWithDifferentSigns(arr, n);
+    if (pairIndex == -1) 
     {
-        cout << "Пара не найдена." << endl;
-    } 
-    else 
+        cout << "No such pair found." << endl;
+    } else 
     {
-        cout << "Пар: " << pairIndex << endl;
+        cout << "First pair index with different signs: " << pairIndex << endl;
     }
+
     delete[] arr;
     return 0;
 }
@@ -123,52 +116,45 @@ int getValue()
 {
     int value = 0;
     cin >> value;
-    if (cin.fail())
+    if (cin.fail()) 
     {
-        cout << "Неверный ввод. Остановка." << endl;
+        cout << "Invalid input. Aborting." << endl;
         abort();
     }
     return value;
 }
 
-size_t razmmass()
+size_t getSize() 
 {
-    cout << "Введите размер массива: ";
+    cout << "Enter n: ";
     int n = getValue();
-    kormass(n);
+    checkN(n);
     return size_t(n);
 }
 
-void kormass(const int n)
+void checkN(const int n) 
 {
     if (n <= 0) 
     {
-        cout << "Неверный размер. Остановка." << endl;
+        cout << "Invalid size. Aborting." << endl;
         abort();
     }
 }
 
-void zapmass(int* arr, size_t n)
+void fillArray(int* arr, const size_t n) 
 {
-    cout << "Выбери метод ввода (" << RANDOM << " - Рандом, " << MANUALY << " - Ручной ввод): ";
+    cout << "Choose input method (" << RANDOM << " - random, " << MANUALY << " - manual): ";
     int choice = getValue();
-    int min_val, max_val;
-    
-    if (choice == RANDOM || choice == MANUALY) {
-        cout << "Введите минимальное значение: ";
-        min_val = getValue();
-        cout << "Введите максимальное значение: ";
-        max_val = getValue();
-    }
-
     switch (choice) 
     {
         case RANDOM: 
         {
             srand(time(0));
-            for (size_t i = 0; i < n; i++)
+            for (size_t i = 0; i < n; i++) 
             {
-                arr[i] = min_val + rand() % (max_val - min_val + 1);
+                int min = -30;
+                int max = 70;
+                arr[i] = min + rand() % (max - min + 1);
             }
             break;
         }
@@ -176,68 +162,75 @@ void zapmass(int* arr, size_t n)
         {
             for (size_t i = 0; i < n; i++) 
             {
-                cout << "Ввод массива[" << i + 1 << "] (от " << min_val << " до " << max_val << "): ";
-                int value = getValue();
-                if (value < min_val || value > max_val)
+                while (true) 
                 {
-                    cout << "Ошибка! Значение вне диапазона. Программа остановлена." << endl;
-                    abort();
+                    cout << "Enter arr[" << i + 1 << "] (-30 to 70): ";
+                    int value = getValue();
+                    
+                    if (value >= -30 && value <= 70) 
+                    {
+                        arr[i] = value;
+                        break;
+                    }
+                    cout << "Error! Value must be between -30 and 70. Try again." << endl;
                 }
-                arr[i] = value;
             }
             break;
         }
         default:
-            cout << "Неверный выбор. Остановка." << endl;
+            cout << "Invalid choice. Aborting." << endl;
             abort();
     }
 }
 
-void vivoidmass(const int* arr, size_t n)
+void printArray(int* arr, const size_t n) 
 {
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++) 
     {
         cout << arr[i] << " ";
     }
     cout << endl;
 }
 
-int maxotrmass(const int* arr, size_t n)
+int findMaxAbs(int* arr, const size_t n) 
 {
-    int maxNeg = -11;
-    for (size_t i = 0; i < n; i++) {
-        if (arr[i] < 0 && arr[i] > maxNeg)
+    int maxAbs = -31; 
+    for (size_t i = 0; i < n; i++) 
+    {
+        if (arr[i] > maxAbs) 
         {
-            maxNeg = arr[i];
+            maxAbs = arr[i];
         }
     }
-    return maxNeg;
+    return maxAbs;
 }
 
-void zammass(int* arr, size_t n)
+void replacePenultimateWithMaxAbs(int* arr, const size_t n) 
 {
-    if (n < 2)
+    if (n < 2) 
     {
-        cout << "Массив слишком мал для замены второго элемента." << endl;
+        cout << "The array is too small to replace the penultimate element." << endl;
         return;
     }
-    int index = firstNegativ(arr, n);
-    if (index == -1) 
+
+    int maxAbs = findMaxAbs(arr, n);
+    
+    if (maxAbs == -31) 
     {
-        cout << "Нет отрицательных элементов. Второй элемент не заменен." << endl;
+        cout << "No valid elements found for replacement." << endl;
     } 
     else 
     {
-        arr[1] = arr[index];
+        arr[n - 2] = maxAbs; 
     }
 }
 
-int c4etmass(const int* arr, size_t n, const int A) 
+int countDivisibleByN(int* arr, size_t n, int N) 
 {
     int count = 0;
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++) 
     {
-        if (arr[i] > 0 && arr[i] <= A)
+        if (arr[i] % N == 0) 
         {
             count++;
         }
@@ -245,26 +238,15 @@ int c4etmass(const int* arr, size_t n, const int A)
     return count;
 }
 
-int parmass(const int* arr, size_t n, const int number) 
+int findFirstPairWithDifferentSigns(int* arr, size_t n) 
 {
     for (size_t i = 0; i < n - 1; i++) 
     {
-        if (arr[i] + arr[i + 1] < number)
+        if ((arr[i] >= 0 && arr[i + 1] < 0) || (arr[i] < 0 && arr[i + 1] >= 0)) 
         {
-            return static_cast<int>(i);
+            return i;
         }
     }
     return -1;
 }
 
-int firstNegativ(const int* arr, size_t n)
-{
-    for (size_t i = 0; i < n; ++i)
-    {
-        if (arr[i] < 0) 
-        {
-            return static_cast<int>(i);
-        }
-    }
-    return -1;
-}
