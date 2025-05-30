@@ -2,219 +2,341 @@
 #include <iomanip>
 #include <ctime>
 #include <cstdlib>
-#include <cmath>
 
 using namespace std;
-int getValue();
+
 /**
  * @brief Считывает целое значение с клавиатуры с проверкой ввода
- * @return Введенное целое число
- * @note При некорректном вводе завершает программу с ошибкой
+ * @return Введенное значение
+ * @exception Завершает программу при ошибке ввода
  */
+int getValue();
 
-size_t getSize();
 /**
  * @brief Получает и проверяет размер массива
- * @return Положительный размер массива
- * @note При значении <= 0 завершает программу с ошибкой
+ * @return Размер массива
  */
+size_t getSize();
 
+/**
+ * @brief Проверяет корректность размера массива
+ * @param n Проверяемое значение размера
+ */
+void checkN(const int n);
+
+/**
+ * @brief Создает новый двумерный массив
+ * @param m Количество строк
+ * @param n Количество столбцов
+ * @return Указатель на созданный массив
+ */
 int** getNewArray(const size_t m, const size_t n);
-/**
- * @brief Создает двумерный массив (матрицу) в динамической памяти
- * @param m Количество строк в массиве
- * @param n Количество столбцов в массиве
- * @return Указатель на созданный двумерный массив
- */
-
-void printArray(int** array, const size_t m, const size_t n);
 
 /**
- * @brief Выводит массив в форматированном виде
- * @param array Целевой массив для вывода
- * @param m Количество строк
- * @param n Количество столбцов
- */
-
-void fillArray(int** array, const size_t m, const size_t n);
-
-/**
- * @brief Заполняет массив вручную через консольный ввод
- * @param array Целевой массив
- * @param m Количество строк
- * @param n Количество столбцов
- */
-
-void fillRandom(int** array, const size_t m, const size_t n, const int start, const int end);
-/**
- * @brief Заполняет массив случайными числами в заданном диапазоне
- * @param array Целевой массив
- * @param m Количество строк
- * @param n Количество столбцов
- * @param start Нижняя граница значений
- * @param end Верхняя граница значений
- */
-
-void deleteArray(int** array, const size_t m, const size_t n);
-/**
- * @brief Освобождает память двумерного массива
+ * @brief Выводит двумерный массив на экран
  * @param array Указатель на массив
  * @param m Количество строк
  * @param n Количество столбцов
  */
+void printArray(int** array, const size_t m, const size_t n);
 
+/**
+ * @brief Заполняет массив значениями вручную
+ * @param array Указатель на массив
+ * @param m Количество строк
+ * @param n Количество столбцов
+ */
+void fillArray(int** array, const size_t m, const size_t n);
+
+/**
+ * @brief Заполняет массив случайными числами в заданном диапазоне
+ * @param array Указатель на массив
+ * @param m Количество строк
+ * @param n Количество столбцов
+ * @param start Начало диапазона случайных чисел
+ * @param end Конец диапазона случайных чисел
+ */
+void fillRandom(int** array, const size_t m, const size_t n, const int start, const int end);
+
+/**
+ * @brief Освобождает память, занятую двумерным массивом
+ * @param array Указатель на массив
+ * @param m Количество строк
+ * @param n Количество столбцов
+ */
+void deleteArray(int** array, const size_t m, const size_t n);
+
+/**
+ * @brief Создает копию массива
+ * @param source Исходный массив
+ * @param n,m Размер массива
+ * @return Указатель на новый массив-копию
+ */
 int** copyArray(int** array, const size_t m, const size_t n);
+
 /**
- * @brief Создает глубокую копию массива
- * @param array Исходный массив для копирования
+ * @brief Заменяет четные элементы массива нулями
+ * @param array Указатель на массив
  * @param m Количество строк
  * @param n Количество столбцов
- * @return Новая независимая копия массива
  */
+int** replaceEvenWithZero(int** array, const size_t m, const size_t n);
 
-void zapchutmass(int** array, const size_t m, const size_t n);
 /**
- * @brief Заменяет четные элементы на максимальный по модулю элемент в столбце
- * @param array Целевой массив
- * @param m Количество строк
+ * @brief Находит минимальное значение в строке массива
+ * @param row Указатель на строку массива
+ * @param n Количество элементов в строке
+ * @return Минимальное значение в строке
+ */
+int findMinInRow(const int* row, const size_t n);
+
+/**
+ * @brief Вставляет строки (1,2,3...) после строк, содержащих минимальное значение
+ * @param array Указатель на исходный массив
+ * @param m Ссылка на количество строк (изменяется при вставке)
  * @param n Количество столбцов
- * @note Модифицирует исходный массив
+ * @return Указатель на новый массив
  */
+int** insertRowsAfterMin(int** array, const size_t m, const size_t n, size_t& newM);
 
-size_t countColumns(int** array, const size_t n);
 /**
- * @brief Подсчитывает количество столбцов с нечетным первым элементом
- * @param array Исходный массив
- * @param n Количество столбцов
- * @return Количество подходящих столбцов
+ * @brief Перечисление для выбора способа заполнения массива
+ * @param RANDOM Заполнение случайными числами (значение 5)
+ * @param MANUAL Ручное заполнение (значение 6)
  */
+enum { RANDOM = 5, MANUAL = 6 };
 
-int** ydchet(int** array, const size_t m, const size_t n, size_t& new_n);
-/**
- * @brief Удаляет столбцы с четным первым элементом
- * @param array Исходный массив
- * @param m Количество строк
- * @param n Количество столбцов
- * @param new_n Ссылка для возврата нового количества столбцов
- * @return Новый массив без удаленных столбцов или nullptr
- * @note Требует последующего удаления возвращаемого массива
- */
-
-enum { RANDOM = 1, MANUAL = 0 };
-/**
-* @brief Перечисление для выбора способа заполнения данных
-* @param MANUAL Выбор ручного заполнения массива
-* @param RANDOM Выбор автоматического заполнения массива
-*/
-int main() 
+int main()
 {
-    cout << "Введите m (строки): ";
+    cout << "Enter m: ";
     size_t m = getSize();
-    cout << "Введите n (столбцы): ";
+    cout << "Enter n: ";
     size_t n = getSize();
-    int** array = getNewArray(m, n); 
-    cout << "Выберите способ заполнения: " << MANUAL << " - вручную, " << RANDOM << " - случайные числа: ";
+
+    int** array = getNewArray(m, n);
+
+    cout << "Enter the way to fill array: " << (int)MANUAL <<
+        " to fill manually, " << (int)RANDOM << " to fill randomly: ";
     int choice = getValue();
+
     int start = 0, end = 0;
-    switch (choice) 
+    switch (choice)
     {
-        case RANDOM:
-            cout << "Введите начало диапазона: ";
-            start = getValue();
-            cout << "Введите конец диапазона: ";
-            end = getValue();
-            fillRandom(array, m, n, start, end);
-            break;
-        case MANUAL:
-            fillArray(array, m, n);
-            break;
-        default:
-            cout << "Ошибка";
+    case RANDOM:
+        cout << "Enter start: ";
+        start = getValue();
+        cout << "Enter end: ";
+        end = getValue();
+        if (start >= end)
+        {
+            cout << "Error: start must be less than end" << endl;
             deleteArray(array, m, n);
             return 1;
+        }
+        fillRandom(array, m, n, start, end);
+        break;
+    case MANUAL:
+        fillArray(array, m, n);
+        break;
+    default:
+        cout << "Error" << endl;
+        deleteArray(array, m, n);
+        return 1;
     }
-    cout << "Исходный массив:";
+
+    cout << "Original array:" << endl;
     printArray(array, m, n);
-    
-    int** task1Array = copyArray(array, m, n);
-    zapchutmass(task1Array, m, n);
-    cout << "После задачи 1 (замена чётных на максимум в столбце):";
-    printArray(task1Array, m, n);
-    deleteArray(task1Array, m, n);
-    size_t new_n;
-    int** task2Source = copyArray(array, m, n);
-    int** task2Array = ydchet(task2Source, m, n, new_n);
-    cout << "После задачи 2 (удалены столбцы с чётным первым элементом):";
-    if (task2Array != nullptr && new_n > 0) 
-    {
-        printArray(task2Array, m, new_n);
-        deleteArray(task2Array, m, new_n);
-    } 
-    else 
-    {
-        cout << "Нет оставшихся столбцов." << endl;
-    }
-    deleteArray(task2Source, m, n);
+
+    int** array1 = replaceEvenWithZero(array, m, n);
+    cout << "Array after replacing even elements with zero:" << endl;
+    printArray(array1, m, n);
+
+    size_t newM;
+    int** array2 = insertRowsAfterMin(array, m, n, newM);
+    cout << "Array after inserting rows:" << endl;
+    printArray(array2, newM, n);
 
     deleteArray(array, m, n);
+    deleteArray(array1, m, n);
+    deleteArray(array2, newM, n);
+
     return 0;
 }
-void zapchutmass(int** array, const size_t m, const size_t n) 
+
+int** replaceEvenWithZero(int** array, const size_t m, const size_t n)
 {
-    for (size_t j = 0; j < n; j++) 
+    int** newArray = copyArray(array, m, n);
+    for (size_t i = 0; i < m; i++)
     {
-        int max_abs = abs(array[0][j]);
-        int max_val = array[0][j];
-        for (size_t i = 1; i < m; i++) 
+        for (size_t j = 0; j < n; j++)
         {
-            if (abs(array[i][j]) > max_abs) 
+            if (newArray[i][j] % 2 == 0)
             {
-                max_abs = abs(array[i][j]);
-                max_val = array[i][j];
+                newArray[i][j] = 0;
             }
         }
-        for (size_t i = 0; i < m; i++) 
+    }
+    return newArray;
+}
+
+int findMinInRow(const int* row, const size_t n)
+{
+    int minVal = row[0];
+    for (size_t j = 1; j < n; j++)
+    {
+        if (row[j] < minVal)
         {
-            if (array[i][j] % 2 == 0) 
+            minVal = row[j];
+        }
+    }
+    return minVal;
+}
+
+int** insertRowsAfterMin(int** array, const size_t m, const size_t n, size_t& newM)
+{
+    int* rowMins = new int[m];
+    for (size_t i = 0; i < m; i++)
+    {
+        rowMins[i] = findMinInRow(array[i], n);
+    }
+
+    int globalMin = rowMins[0];
+    for (size_t i = 1; i < m; i++)
+    {
+        if (rowMins[i] < globalMin)
+        {
+            globalMin = rowMins[i];
+        }
+    }
+
+    size_t insertCount = 0;
+    for (size_t i = 0; i < m; i++)
+    {
+        if (rowMins[i] == globalMin)
+        {
+            insertCount++;
+        }
+    }
+
+    newM = m + insertCount;
+    int** newArray = getNewArray(newM, n);
+
+    size_t newRow = 0;
+    for (size_t i = 0; i < m; i++)
+    {
+        
+        for (size_t j = 0; j < n; j++)
+        {
+            newArray[newRow][j] = array[i][j];
+        }
+        newRow++;
+
+        
+        if (rowMins[i] == globalMin)
+        {
+            for (size_t j = 0; j < n; j++)
             {
-                array[i][j] = max_val;
+                newArray[newRow][j] = static_cast<int>(j + 1); 
             }
+            newRow++;
+        }
+    }
+
+    delete[] rowMins;
+    return newArray;
+}
+
+int getValue()
+{
+    int value = 0;
+    cin >> value;
+    if (cin.fail())
+    {
+        cout << "Error" << endl;
+        abort();
+    }
+    return value;
+}
+
+size_t getSize()
+{
+    int n = getValue();
+    checkN(n);
+    return static_cast<size_t>(n);
+}
+
+void checkN(const int n)
+{
+    if (n <= 0)
+    {
+        cout << "Error" << endl;
+        abort();
+    }
+}
+
+int** getNewArray(const size_t m, const size_t n)
+{
+    int** array = new int*[m];
+    for (size_t i = 0; i < m; i++)
+    {
+        array[i] = new int[n];
+    }
+    return array;
+}
+
+void printArray(int** array, const size_t m, const size_t n)
+{
+    for (size_t i = 0; i < m; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            cout << setw(6) << array[i][j];
+        }
+        cout << endl;
+    }
+}
+
+void fillArray(int** array, const size_t m, const size_t n)
+{
+    for (size_t i = 0; i < m; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            cout << "Enter array[" << i << "," << j << "] = ";
+            array[i][j] = getValue();
         }
     }
 }
 
-size_t countColumns(int** array, const size_t n) 
+void fillRandom(int** array, const size_t m, const size_t n, const int start, const int end)
 {
-    size_t count = 0;
-    for (size_t j = 0; j < n; j++) 
+    srand(time(0));
+    for (size_t i = 0; i < m; i++)
     {
-        if (array[0][j] % 2 != 0) 
+        for (size_t j = 0; j < n; j++)
         {
-            count++;
+            array[i][j] = rand() % (end - start + 1) + start;
         }
     }
-    return count;
 }
 
-int** ydchet(int** array, const size_t m, const size_t n, size_t& new_n) 
+void deleteArray(int** array, const size_t m, const size_t n)
 {
-    new_n = countColumns(array, n);
-    if (new_n == 0) 
+    for (size_t i = 0; i < m; i++)
     {
-        return nullptr;
+        delete[] array[i];
     }
-    int** newArray = getNewArray(m, new_n);
-    size_t new_j = 0;
+    delete[] array;
+}
 
-    for (size_t j = 0; j < n; j++) 
+int** copyArray(int** array, const size_t m, const size_t n)
+{
+    int** newArray = getNewArray(m, n);
+    for (size_t i = 0; i < m; i++)
     {
-        if (array[0][j] % 2 != 0) 
+        for (size_t j = 0; j < n; j++)
         {
-            for (size_t i = 0; i < m; i++) 
-            {
-                newArray[i][new_j] = array[i][j];
-            }
-            new_j++;
+            newArray[i][j] = array[i][j];
         }
     }
     return newArray;
