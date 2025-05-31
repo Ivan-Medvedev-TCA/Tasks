@@ -25,6 +25,7 @@ size_t razmmass();
 */
 void kormass(const int n);
 
+
 /**
 * @brief Заполняет массив значениями
 * @param arr Указатель на массив
@@ -82,6 +83,14 @@ int parmass(const int* arr, const size_t n, const int number);
 int firstNegativ(const int* arr, size_t n);
 
 /**
+* @brief Создает полную копию массива
+* @param source Исходный массив для копирования
+* @param size Размер массива
+* @return Указатель на новый массив-копию
+*/
+int* copyArray(const int* source, size_t size);
+
+/**
  * @brief Режимы ввода элементов массива
  */
 enum {MANUALY, RANDOM}; 
@@ -98,25 +107,41 @@ int main()
     cout << "Исходный массив: ";
     vivoidmass(arr, n);
     zammass(arr, n);
+    
+
+    int* arr_copy = copyArray(arr, n);
     cout << "Массив после замены: ";
     vivoidmass(arr, n);
+    cout << "Копия массива: ";
+    vivoidmass(arr_copy, n);
+
     cout << "Введите А для задания 2: ";
     int A = getValue();
-    int count = c4etmass(arr, n, A);
+    int count = c4etmass(arr_copy, n, A);
     cout << "Количество положительных элементов <= A: " << count << endl;
+    
     cout << "Введите число для задачи 3: ";
     int num = getValue();
-    int pairIndex = parmass(arr, n, num);
-    if (pairIndex == -1)
-    {
+    int pairIndex = parmass(arr_copy, n, num);
+    
+    if (pairIndex == -1) {
         cout << "Пара не найдена." << endl;
-    } 
-    else 
-    {
+    } else {
         cout << "Пара начинается с индекса: " << pairIndex << endl;
     }
+  
     delete[] arr;
+    delete[] arr_copy;
     return 0;
+}
+int* copyArray(const int* source, size_t size) 
+{
+    int* newArray = new int[size];
+    for (size_t i = 0; i < size; i++) 
+    {
+        newArray[i] = source[i];
+    }
+    return newArray;
 }
 
 int getValue() 
@@ -224,9 +249,12 @@ int maxotrmass(const int* arr, size_t n)
                
                 maxNeg = arr[i];
                 found = true;
-            } else {
+            } 
+            else 
+            {
                 
-                if (arr[i] > maxNeg) {
+                if (arr[i] > maxNeg)
+                {
                     maxNeg = arr[i];
                 }
             }
