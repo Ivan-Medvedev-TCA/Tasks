@@ -25,7 +25,6 @@ size_t razmmass();
 */
 void kormass(const int n);
 
-
 /**
 * @brief Заполняет массив значениями
 * @param arr Указатель на массив
@@ -44,7 +43,7 @@ void vivoidmass(const int* arr, size_t n);
 * @brief Находит максимальный отрицательный элемент массива
 * @param arr Указатель на массив
 * @param n Размер массива
-* @return Максимальное отрицательное значение или -11 если таких элементов нет
+* @return Максимальное отрицательное значение или -1 если таких элементов нет
 */
 int maxotrmass(const int* arr, const size_t n);
 
@@ -52,7 +51,7 @@ int maxotrmass(const int* arr, const size_t n);
 * @brief Заменяет второй элемент массива на первый отрицательный
 * @param arr Указатель на массив
 * @param n Размер массива
-* @return Выводит предупреждение если массив слишком мал или нет отрицательных элементов
+* @note Выводит предупреждение если массив слишком мал или нет отрицательных элементов
 */
 void zammass(int* arr, size_t n);
 
@@ -106,13 +105,12 @@ int main()
     zapmass(arr, n);
     cout << "Исходный массив: ";
     vivoidmass(arr, n);
-    zammass(arr, n);
     
-
     int* arr_copy = copyArray(arr, n);
-    cout << "Массив после замены: ";
-    vivoidmass(arr, n);
-    cout << "Копия массива: ";
+    
+  
+    zammass(arr_copy, n);
+    cout << "Массив после замены (копия): ";
     vivoidmass(arr_copy, n);
 
     cout << "Введите А для задания 2: ";
@@ -134,6 +132,7 @@ int main()
     delete[] arr_copy;
     return 0;
 }
+
 int* copyArray(const int* source, size_t size) 
 {
     int* newArray = new int[size];
@@ -212,9 +211,10 @@ void zapmass(int* arr, size_t n)
             {
                 cout << "Введите элемент[" << i + 1 << "] (от " << min_val << " до " << max_val << "): ";
                 int value = getValue();
-                while (value < min_val || value > max_val) {
-                    cout << "Значение вне диапазона! Повторите ввод: ";
-                    value = getValue();
+                // Убрана проверка диапазона с циклом
+                if (value < min_val || value > max_val) {
+                    cout << "Ошибка: значение вне диапазона. Программа остановлена." << endl;
+                    abort();
                 }
                 arr[i] = value;
             }
@@ -246,13 +246,11 @@ int maxotrmass(const int* arr, size_t n)
         {     
             if (!found)
             {
-               
                 maxNeg = arr[i];
                 found = true;
             } 
             else 
             {
-                
                 if (arr[i] > maxNeg)
                 {
                     maxNeg = arr[i];
@@ -266,6 +264,7 @@ int maxotrmass(const int* arr, size_t n)
     }
     return maxNeg;   
 }
+
 void zammass(int* arr, size_t n)
 {
     if (n < 2)
@@ -308,6 +307,7 @@ int parmass(const int* arr, const size_t n, const int number)
     }
     return -1;
 }
+
 int firstNegativ(const int* arr, size_t n)
 {
     for (size_t i = 0; i < n; ++i)
