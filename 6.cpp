@@ -211,7 +211,7 @@ void zapmass(int* arr, size_t n)
             {
                 cout << "Введите элемент[" << i + 1 << "] (от " << min_val << " до " << max_val << "): ";
                 int value = getValue();
-                // Убрана проверка диапазона с циклом
+              
                 if (value < min_val || value > max_val) {
                     cout << "Ошибка: значение вне диапазона. Программа остановлена." << endl;
                     abort();
