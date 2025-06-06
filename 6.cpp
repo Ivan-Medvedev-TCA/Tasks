@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 /**
 * @brief Считывает целое значение с клавиатуры с проверкой ввода
 * @return Введенное значение
@@ -31,14 +30,14 @@ void kormass(const int n);
 * @param arr Указатель на массив
 * @param n Размер массива
 */
-void zapmass(int* arr, size_t n);
+void zapmass(int* arr,const size_t n);
 
 /**
 * @brief Выводит массив на экран
 * @param arr Указатель на массив
 * @param n Размер массива
 */
-void vivoidmass(const int* arr, size_t n);
+void vivoidmass(const int* arr,const size_t n);
 
 /**
 * @brief Находит максимальный отрицательный элемент массива
@@ -54,7 +53,7 @@ int maxotrmass(const int* arr, const size_t n);
 * @param n Размер массива
 * @note Выводит предупреждение если массив слишком мал или нет отрицательных элементов
 */
-void zammass(int* arr, size_t n);
+void zammass(int* arr,const size_t n);
 
 /**
 * @brief Считает количество положительных элементов, не превышающих A
@@ -63,7 +62,7 @@ void zammass(int* arr, size_t n);
 * @param A Верхняя граница значений
 * @return Количество элементов удовлетворяющих условию
 */
-int c4etmass(const int* arr, size_t n, const int A);
+int c4etmass(const int* arr,const size_t n, const int A);
 
 /**
 * @brief Ищет первую пару соседних элементов с суммой меньше заданного числа
@@ -88,7 +87,7 @@ int firstNegativ(const int* arr, size_t n);
 * @param size Размер массива
 * @return Указатель на новый массив-копию
 */
-int* copyArray(const int* source, size_t size);
+int* copyArray(const int* source,const size_t size);
 
 /**
  * @brief Режимы ввода элементов массива
@@ -134,7 +133,7 @@ int main()
     return 0;
 }
 
-int* copyArray(const int* source, size_t size) 
+int* copyArray(const int* source,const size_t size) 
 {
     int* newArray = new int[size];
     for (size_t i = 0; i < size; i++) 
@@ -144,20 +143,12 @@ int* copyArray(const int* source, size_t size)
     return newArray;
 }
 
-int getValue() 
+int getValue()
 {
     int value = 0;
-    while (true)
-    {
-        cin >> value;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Неверный ввод. Повторите: ";
-        } else {
-            break;
-        }
+    if (!(cin >> value)) {
+        cerr << "Ошибка ввода! Программа завершена." << endl;
+        abort();
     }
     return value;
 }
@@ -179,7 +170,7 @@ void kormass(const int n)
     }
 }
 
-void zapmass(int* arr, size_t n)
+void zapmass(int* arr,const size_t n)
 {
     cout << "Выберите метод ввода (" << RANDOM << " - Случайный, " << MANUALY << " - Ручной): ";
     int choice = getValue();
@@ -227,7 +218,7 @@ void zapmass(int* arr, size_t n)
     }
 }
 
-void vivoidmass(const int* arr, size_t n)
+void vivoidmass(const int* arr,const size_t n)
 {
     for (size_t i = 0; i < n; i++)
     {
@@ -236,7 +227,7 @@ void vivoidmass(const int* arr, size_t n)
     cout << endl;
 }
 
-int maxotrmass(const int* arr, size_t n)
+int maxotrmass(const int* arr,const size_t n)
 {
     bool found = false;       
     int maxNeg = 0;           
@@ -266,7 +257,7 @@ int maxotrmass(const int* arr, size_t n)
     return maxNeg;   
 }
 
-void zammass(int* arr, size_t n)
+void zammass(int* arr,const size_t n)
 {
     if (n < 2)
     {
@@ -284,7 +275,7 @@ void zammass(int* arr, size_t n)
     }
 }
 
-int c4etmass(const int* arr, size_t n, const int A) 
+int c4etmass(const int* arr,const size_t n, const int A) 
 {
     int count = 0;
     for (size_t i = 0; i < n; i++)
@@ -309,7 +300,7 @@ int parmass(const int* arr, const size_t n, const int number)
     return -1;
 }
 
-int firstNegativ(const int* arr, size_t n)
+int firstNegativ(const int* arr,const size_t n)
 {
     for (size_t i = 0; i < n; ++i)
     {
